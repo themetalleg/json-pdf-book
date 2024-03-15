@@ -1,0 +1,22 @@
+import PyPDF2
+import json
+
+# Open your PDF
+with open('yourfile.pdf', 'rb') as pdf_file:
+    reader = PyPDF2.PdfReader(pdf_file)
+    num_pages = len(reader.pages)
+
+    # This dictionary will store your pages and their contents
+    pdf_dict = {}
+
+    # Extract text from each page
+    for i in range(num_pages):
+        page = reader.pages[i]
+        text = page.extract_text() or ""  # Default text if the page is empty
+        text = text.replace("\n", " ")
+        # Adding the extracted text to the dictionary
+        pdf_dict[f'Page {i}'] = text
+
+# Convert the dictionary to JSON and save it to a file
+with open('output.json', 'w') as json_file:
+    json.dump(pdf_dict, json_file, indent=4, ensure_ascii=False)
